@@ -1,6 +1,8 @@
 Project Title     - AI Marketing Automation Agent.
-Summary           - An AI-powered marketing automation system that automates content generation, approval, scheduling, and publishing using n8n workflows and OpenAI.
-Problem Statement - Content creation and publishing workflows are repetitive and time-consuming for creators and businesses. This project automates the process using                      AI agents, workflow orchestration, and scheduled publishing systems.
+
+Summary           - An AI-powered marketing automation system that automates content generation, approval, scheduling, and publishing using n8n workflows and                          OpenAI.
+
+Problem Statement - Content creation and publishing workflows are repetitive and time-consuming for creators and businesses. This project automates the process                        using AI agents, workflow orchestration, and scheduled publishing systems.
 Features Section  - 
                   - Telegram-based content requests
                   - Multi-agent AI content generation
@@ -11,10 +13,6 @@ Features Section  -
                   - Telegram channel auto-posting
 
 Architecture Section - Telegram → AI Strategist → Content Agents → Airtable → Scheduler → Publishing.
-
-Architecture Diagram - 
-
-Workflow Screenshots - 
 
 Tech Stack           -  n8n
                      - OpenAI API
