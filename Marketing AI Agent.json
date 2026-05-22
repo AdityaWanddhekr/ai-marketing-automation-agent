@@ -1,0 +1,1118 @@
+{
+  "name": "Marketing AI Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1552,
+        208
+      ],
+      "id": "deef84fc-5790-44ed-ac63-2ad04267b2ed",
+      "name": "Telegram Trigger",
+      "webhookId": "6c432ec9-e79f-47db-9066-786ad4696dcc",
+      "credentials": {
+        "telegramApi": {
+          "id": "o3OnhwUo6vnbC7CO",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1312,
+        208
+      ],
+      "id": "7ab6b588-1b6e-459f-b254-7576e6091df9",
+      "name": "Get a chat",
+      "webhookId": "86af7264-dfd0-44a7-b157-e5c4d1115b8a",
+      "credentials": {
+        "telegramApi": {
+          "id": "o3OnhwUo6vnbC7CO",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Write a topic you want to create post",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1072,
+        224
+      ],
+      "id": "ee224ec1-7486-48bb-b946-3f804c890295",
+      "name": "Send a text message",
+      "webhookId": "3e452ec4-0bfd-414b-a14e-24c0ca736154",
+      "credentials": {
+        "telegramApi": {
+          "id": "o3OnhwUo6vnbC7CO",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1552,
+        1056
+      ],
+      "id": "7a965525-2b3d-432c-a552-26931a52b97b",
+      "name": "Telegram Trigger2",
+      "webhookId": "6c432ec9-e79f-47db-9066-786ad4696dcc",
+      "credentials": {
+        "telegramApi": {
+          "id": "o3OnhwUo6vnbC7CO",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appfQ39E6pvZwdHux",
+          "mode": "list",
+          "cachedResultName": "Marketing AI ",
+          "cachedResultUrl": "https://airtable.com/appfQ39E6pvZwdHux"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl5ljoWCewtDRX6m",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appfQ39E6pvZwdHux/tbl5ljoWCewtDRX6m"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1120,
+        1056
+      ],
+      "id": "a272df91-5f0d-4f5d-adbf-c31bed3b6943",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "3Dqoae5zycmORfaE",
+          "name": "Airtable Personal Access Token account 8"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a senior social media strategist.\n\nUser Request:\n{{ $('Telegram Trigger2').item.json.message.text }}\n\nBrand Tone:\n{{$json.fields.Tone}}\n\nTarget Audience:\n{{$json.fields.Audience}}\n\nWriting Style:\n{{$json.fields.WritingStyle}}\n\nYour task:\nAnalyze the topic and decide:\n\n1. Best emotional angle\n2. Hook strategy\n3. Viral potential\n4. Best CTA approach\n5. Content structure\n\nKeep response concise and strategic.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -592,
+        896
+      ],
+      "id": "166e1f3a-2f3e-4a6b-abb5-a017632c5276",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "chatId": "={{ $json.message.chat.id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1344,
+        1056
+      ],
+      "id": "431f8167-7d1f-4c1c-8b38-db3afed18308",
+      "name": "Get a chat2",
+      "webhookId": "b5dcd91b-3506-4ef8-8618-e8add9cf2378",
+      "credentials": {
+        "telegramApi": {
+          "id": "o3OnhwUo6vnbC7CO",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        1088
+      ],
+      "id": "028ff588-a8fd-4d84-b4f7-d8046bdc8f52",
+      "name": "Content Strategist",
+      "credentials": {
+        "groqApi": {
+          "id": "4vnlCsCA7zCqFjNp",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        400,
+        992
+      ],
+      "id": "2d57651f-8547-48fd-b9df-4dc53bb114a9",
+      "name": "LinkedIN Writter",
+      "credentials": {
+        "groqApi": {
+          "id": "4vnlCsCA7zCqFjNp",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        32,
+        1200
+      ],
+      "id": "0935ed5b-31bc-497d-8052-15348ab1dde5",
+      "name": "Reel Hook Generator",
+      "credentials": {
+        "groqApi": {
+          "id": "4vnlCsCA7zCqFjNp",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        80,
+        1536
+      ],
+      "id": "4ea051cb-318b-441f-86e1-a88e5cbd8691",
+      "name": "Hashtag Generator",
+      "credentials": {
+        "groqApi": {
+          "id": "4vnlCsCA7zCqFjNp",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an Instagram content expert.\n\nStrategy Notes:\n{{ $json.output }}\n\nCreate:\n- Short engaging caption\n- Emotional tone\n- Instagram-friendly style\n- CTA for comments",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        80,
+        624
+      ],
+      "id": "f636e6f7-c539-4fb9-8dc9-deb8cf0edec3",
+      "name": "Instagram Writter"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        80,
+        816
+      ],
+      "id": "10afc1d5-2676-48c6-a776-10df7e77e183",
+      "name": "Instagram Writter1",
+      "credentials": {
+        "groqApi": {
+          "id": "4vnlCsCA7zCqFjNp",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional LinkedIn content writer.\n\nStrategy Notes:\n{{ $json.output }}\n\nCreate:\n- Powerful hook\n- Professional LinkedIn post\n- Strong CTA\n\nAudience:\nYoung professionals and MBA students.\n\nTone:\nProfessional and engaging.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        384,
+        816
+      ],
+      "id": "36a102c3-b8ba-45aa-bfa4-baa6fa613069",
+      "name": "LinkedIN Writter1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a viral short-form content strategist.\n\nStrategy Notes:\n{{ $json.output }}\n\nGenerate:\n5 viral reel hooks.\n\nMake them curiosity-driven and emotionally engaging.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        32,
+        1040
+      ],
+      "id": "35e2493e-ad74-489d-82ef-4fc31ba2e0ab",
+      "name": "Reel Hook Generator1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Generate 15 highly relevant hashtags based on:\n\n{{ $json.output }}\n\nMix:\n- trending\n- niche\n- audience-targeted hashtags",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        80,
+        1376
+      ],
+      "id": "f686e0a3-6209-4161-a651-5891afca9174",
+      "name": "Hashtag generator"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        688,
+        672
+      ],
+      "id": "7813b7f1-c8b3-4f0a-a9e8-eed64d9dccd2",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        688,
+        1328
+      ],
+      "id": "f5966665-e3dc-449b-832d-c574b1300ff4",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        912,
+        960
+      ],
+      "id": "a3a79ce7-bdd5-4d75-909a-54e2c10bf164",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger2').item.json.message.chat.id }}",
+        "text": "=🔥 LinkedIn Post:\n{{ $('LinkedIN Writter1').item.json.output }}\n\n----------------------------------------------------\n📸 Instagram Caption:  \n{{ $('Instagram Writter').item.json.output }}\n\n----------------------------------------------------\n🎬 Reel Hooks:  \n{{ $('Reel Hook Generator1').item.json.output }}\n\n----------------------------------------------------\n#️⃣ Hashtags: \n{{ $('Hashtag generator').item.json.output }}\n\n----------------------------------------------------",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1344,
+        960
+      ],
+      "id": "fedee275-8788-444f-aa83-84c25abd899a",
+      "name": "Send a text message1",
+      "webhookId": "45d97491-de5d-4909-be72-ce00246b6c40",
+      "credentials": {
+        "telegramApi": {
+          "id": "o3OnhwUo6vnbC7CO",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appa8UlIJq9QnYqIa",
+          "mode": "list",
+          "cachedResultName": "ContentPipeline",
+          "cachedResultUrl": "https://airtable.com/appa8UlIJq9QnYqIa"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblXM7rHvVvZQN9wB",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appa8UlIJq9QnYqIa/tblXM7rHvVvZQN9wB"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Topic": "={{ $('Telegram Trigger2').item.json.message.text }}",
+            "LinkedInPost": "={{ $('LinkedIN Writter1').item.json.output }}",
+            "InstagramCaption": "={{ $('Instagram Writter').item.json.output }}",
+            "ReelHooks": "={{ $('Reel Hook Generator1').item.json.output }}",
+            "Hashtags": "={{ $('Hashtag generator').item.json.output }}",
+            "Status": "Draft",
+            "Platform": "LinkedIn"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LinkedInPost",
+              "displayName": "LinkedInPost",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "InstagramCaption",
+              "displayName": "InstagramCaption",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ReelHooks",
+              "displayName": "ReelHooks",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Hashtags",
+              "displayName": "Hashtags",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Draft",
+                  "value": "Draft"
+                },
+                {
+                  "name": "Approved",
+                  "value": "Approved"
+                },
+                {
+                  "name": "Scheduled",
+                  "value": "Scheduled"
+                },
+                {
+                  "name": "Posted",
+                  "value": "Posted"
+                },
+                {
+                  "name": "Rejected",
+                  "value": "Rejected"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PublishDate",
+              "displayName": "PublishDate",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "LinkedIn",
+                  "value": "LinkedIn"
+                },
+                {
+                  "name": "Instagram",
+                  "value": "Instagram"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "CreatedAt",
+              "displayName": "CreatedAt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1136,
+        960
+      ],
+      "id": "5918cccf-f690-4c2a-81fb-b6044d23cc34",
+      "name": "Create a record1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lSSKPp5LJlfJHbEc",
+          "name": "Airtable Personal Access Token account 7"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1488,
+        2144
+      ],
+      "id": "c4f71e63-a675-412e-a499-ad43c6e316af",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appa8UlIJq9QnYqIa",
+          "mode": "list",
+          "cachedResultName": "ContentPipeline",
+          "cachedResultUrl": "https://airtable.com/appa8UlIJq9QnYqIa"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblXM7rHvVvZQN9wB",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appa8UlIJq9QnYqIa/tblXM7rHvVvZQN9wB"
+        },
+        "filterByFormula": "AND(   {Status} = \"Approved\",   {PublishDate} <= NOW() )",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1280,
+        2144
+      ],
+      "id": "861e3dc0-65b3-45c0-afcc-108a180fcccf",
+      "name": "Search records1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lSSKPp5LJlfJHbEc",
+          "name": "Airtable Personal Access Token account 7"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "=-1003718719939",
+        "text": "=🔥 New AI Generated Content\n\n{{$json.fields.LinkedInPost}}\n\n",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1072,
+        2144
+      ],
+      "id": "00880e50-39d2-4075-9224-ad634573b919",
+      "name": "Send a text message2",
+      "webhookId": "a61e263a-a928-4e0c-82d2-b40a039d1e99",
+      "credentials": {
+        "telegramApi": {
+          "id": "o3OnhwUo6vnbC7CO",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appa8UlIJq9QnYqIa",
+          "mode": "list",
+          "cachedResultName": "ContentPipeline",
+          "cachedResultUrl": "https://airtable.com/appa8UlIJq9QnYqIa"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblXM7rHvVvZQN9wB",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appa8UlIJq9QnYqIa/tblXM7rHvVvZQN9wB"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Posted"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "LinkedInPost",
+              "displayName": "LinkedInPost",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "InstagramCaption",
+              "displayName": "InstagramCaption",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ReelHooks",
+              "displayName": "ReelHooks",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Hashtags",
+              "displayName": "Hashtags",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Draft",
+                  "value": "Draft"
+                },
+                {
+                  "name": "Approved",
+                  "value": "Approved"
+                },
+                {
+                  "name": "Scheduled",
+                  "value": "Scheduled"
+                },
+                {
+                  "name": "Posted",
+                  "value": "Posted"
+                },
+                {
+                  "name": "Rejected",
+                  "value": "Rejected"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PublishDate",
+              "displayName": "PublishDate",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "LinkedIn",
+                  "value": "LinkedIn"
+                },
+                {
+                  "name": "Instagram",
+                  "value": "Instagram"
+                },
+                {
+                  "name": "Telegram",
+                  "value": "Telegram"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "CreatedAt",
+              "displayName": "CreatedAt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -864,
+        2144
+      ],
+      "id": "c17dc80e-2ca6-4ec1-a981-ef5707dbee2a",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lSSKPp5LJlfJHbEc",
+          "name": "Airtable Personal Access Token account 7"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a chat": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    },
+    "Telegram Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Get a chat2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a chat2": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Strategist": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Instagram Writter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LinkedIN Writter1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Reel Hook Generator1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Hashtag generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIN Writter": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LinkedIN Writter1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reel Hook Generator": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Reel Hook Generator1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hashtag Generator": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Hashtag generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram Writter1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Instagram Writter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram Writter": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIN Writter1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Reel Hook Generator1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hashtag generator": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Create a record1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search records1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message2": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "80706e60-8a25-46d6-b25d-ad24726b92da",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b25a0fe826df08bf7c349ce34ac79506a28e7608ec681c2d314b53742f11437f"
+  },
+  "id": "POoihIc9LZpplXJu",
+  "tags": []
+}
